@@ -1,14 +1,15 @@
 export const API = Object.freeze({
+    'Generate_SVG': '/api/v1/image/background_generate_svg'
 });
-
-export const Get_WS = function() {
-    return import.meta.env.VITE_WSS_DOMAIN;
-}
 
 export const Get_HTTP = function() {
     return import.meta.env.VITE_API_DOMAIN;
 }
 
-export const CombineAPI = function(url: string) {
-    return Get_HTTP() + url;
+export const GetDomain = function(url: string) {
+    return import.meta.env.VITE_API_DOMAIN + url;
+}
+
+export const GetWSS = function() {
+    return import.meta.env.VITE_WSS_DOMAIN;
 }

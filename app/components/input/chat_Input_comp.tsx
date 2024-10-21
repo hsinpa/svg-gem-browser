@@ -11,7 +11,7 @@ type KeyValuePairType = {
 
 let keyboad_pair_tables: KeyValuePairType = {};
 
-export const Chat_Input_Comp = function() {
+export const Chat_Input_Comp = function( {submit_callback}: {submit_callback: (message: MessageInterface) => void } ) {
     const push_message_callback = useMessageStore(s=>s.push_message);
     const [is_focus, set_focus] = useState(false);
     const [textarea_value, set_textarea] = useState('');
@@ -32,13 +32,13 @@ export const Chat_Input_Comp = function() {
     }
 
     let fire_submit_event = function() {
-        console.log(textarea_value);
-
         let message: MessageInterface = {
             _id: uuidv4(), content: textarea_value, type: 'human', version: 1
         }
 
         push_message_callback(message);
+        
+        submit_callback(message);
         set_textarea('');
     }
     
