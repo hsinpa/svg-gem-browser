@@ -22,7 +22,6 @@ export function remix_uni_fetch(
     if (button != undefined) button.disabled = true; 
 
     try {
-        console.log(data);
         fetcher.formAction = location.href;
 
         fetcher.submit(

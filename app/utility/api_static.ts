@@ -1,5 +1,5 @@
 export const API = Object.freeze({
-    'Generate_SVG': '/api/v1/image/background_generate_svg'
+    'Generate_SVG': 'api/v1/image/background_generate_svg'
 });
 
 export const Get_HTTP = function() {

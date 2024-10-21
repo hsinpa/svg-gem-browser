@@ -10,7 +10,8 @@ import type { LinksFunction } from "@remix-run/node";
 import "./tailwind.css";
 import { WebsocketManager } from "./websocket/websocket";
 import { GetWSS } from "./utility/api_static";
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
+import { useSocketInputStore } from "./zustand/socket.store";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -43,22 +44,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-
-
-const websocket_manager = new WebsocketManager(GetWSS());
-export let wsContext = createContext<WebsocketManager | undefined>(undefined);
-
 export default function App() {
+  const set_socket = useSocketInputStore(x=>x.set_socket);
 
   useEffect(() => {
+    const websocket_manager = new WebsocketManager(GetWSS());
+
     websocket_manager.connect();
-    console.log('Root Socket ' + websocket_manager.id)
+
+    set_socket(websocket_manager);
 
     return () => {
+
     };
   }, []);
 
-  return (<wsContext.Provider value={websocket_manager}>
-    <Outlet />
-  </wsContext.Provider>);
+  return (<Outlet />);
 }

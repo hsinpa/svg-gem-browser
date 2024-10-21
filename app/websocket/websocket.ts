@@ -19,7 +19,7 @@ export class WebsocketManager extends EventSystem {
     }
 
     connect() {
-        this._id = uuidv4.toString();
+        this._id = uuidv4();
         this._socket = new WebSocket(this._url);
 
         this._socket.addEventListener("open", (event) => {

@@ -8,8 +8,8 @@ import { remix_uni_fetch } from "~/utility/utility_method";
 import { Chat_Input_Comp } from "~/components/input/chat_Input_comp";
 import { MessageInterface } from "~/types/chatbot_types";
 import { API, GetDomain } from "~/utility/api_static";
-import { useContext } from "react";
-import { wsContext } from "~/root";
+import { useContext, useEffect } from "react";
+import { useSocketInputStore } from "~/zustand/socket.store";
 
 export const meta: MetaFunction = () => {
   return [
@@ -31,18 +31,22 @@ export const action = async ({request}: ActionFunctionArgs) => {
   return redirect('/svg_workstation/' + session_id);
 }
 
+
 export default function Index() {
   const fetcher = useFetcher({ key: "home_page_fetcher" });
-  const socket = useContext(wsContext)
+  const socket = useSocketInputStore(x=>x.socket);
 
-  let on_input_submit = function(message: MessageInterface) {
+  const on_input_submit = function(message: MessageInterface) {
+    console.log(socket?.id);
 
-    console.log(socket?.id)
     remix_uni_fetch({
       fetcher: fetcher, data: {session_id: message._id, socket_id: socket?.id,  user_input: message.content}
     });
   }
-  
+
+  useEffect(() => {
+    console.log(socket?.id);
+  }, [socket])
 
   return (
     <div className="h-screen flex items-center justify-center">
@@ -56,6 +60,3 @@ export default function Index() {
     </div>
   );
 }
-
-// absolute top-1/2 z-10 flex w-full max-w-[49rem]
-// -translate-y-1/2 flex-col items-stretch px-6 gap-4 justify-start
