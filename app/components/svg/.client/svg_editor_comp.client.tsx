@@ -2,6 +2,7 @@ import React, { MutableRefObject, useCallback, useEffect, useRef, useState } fro
 import CodeMirror, { ViewUpdate } from '@uiw/react-codemirror';
 import { xml } from '@codemirror/lang-xml';
 import { useSVGDataStore } from "~/zustand/svg_data_store";
+import './svg_editor_style.css'
 
 export function SVG_Editor_Viewer() {
     const svg_store = useSVGDataStore();
@@ -34,6 +35,7 @@ export function SVG_Editor_Viewer() {
 
     return (
         <CodeMirror
+
             ref={mirrorRef}
             value={svg_store.svg_code}
             height="100%"
