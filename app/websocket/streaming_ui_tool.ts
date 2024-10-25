@@ -25,7 +25,8 @@ export class StreamingUITool {
     }
 
     on_socket_callback(event_name: string, socket_data: any) {
-        
+        console.log(socket_data);
+
         if (event_name != 'bot') return;
 
         let streaming_data: StreamingType = socket_data;
@@ -37,15 +38,15 @@ export class StreamingUITool {
             if (cache_content == undefined) cache_content = ''
             
             final_text = cache_content + streaming_data.data;
-
+            
+            this._streaming_dict.set(streaming_data.session_id, final_text);
         } else {
             // Complete
             final_text = streaming_data.data;
 
             localStorage.setItem(streaming_data.session_id, final_text);
+            this._streaming_dict.delete(streaming_data.session_id);
         }
-
-        this._streaming_dict.set(streaming_data.session_id, final_text);
 
         if (this.callback != undefined)
             this.callback(streaming_data.session_id, final_text, socket_data.type != 'chunk');

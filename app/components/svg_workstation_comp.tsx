@@ -7,24 +7,31 @@ import { StreamingUITool } from "~/websocket/streaming_ui_tool"
 import { useSocketInputStore } from "~/zustand/socket.store"
 import { useParams } from "@remix-run/react"
 import { parse_svg } from "~/utility/svg_tool/svg_parser"
+import { useChatInputStore } from "~/zustand/chat_input_store"
 
 export const SVG_WorkStation_Comp = function() {
   const socket = useSocketInputStore(x=>x.socket);
+  const set_input_block = useChatInputStore(x=>x.set_input_block);
+
   const set_svg_data = useSVGDataStore(s=>s.set_svg_code);
   const params = useParams();
   let session_id = params['id'];
 
   const on_socket_callback = function(p_session_id: string, socket_data: string, p_complete: boolean) {
-    if (session_id != p_session_id) return;
     const [start_index, end_index] = parse_svg(socket_data);
 
-    if (start_index < 0) return
+    if (start_index < 0 || session_id != p_session_id) {
+      set_input_block(false);
+      return;
+    }
 
     let result = socket_data.substring(start_index);
 
     if (end_index >= start_index) result = socket_data.substring(start_index, end_index);
 
     set_svg_data(result);
+    
+    if (p_complete) set_input_block(false);
   }
 
   useEffect(() => {
@@ -35,7 +42,7 @@ export const SVG_WorkStation_Comp = function() {
           let streaming_tools = new StreamingUITool(socket);
           streaming_tools.callback = on_socket_callback;          
       }
-  }, []);  
+  }, [socket]);  
 
   return (
   <div className="h-full flex flex-col">

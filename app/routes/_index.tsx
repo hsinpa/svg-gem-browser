@@ -22,11 +22,13 @@ export const action = async ({request}: ActionFunctionArgs) => {
   let json = await request.json();
   let session_id = json['session_id'];
 
-  console.log(json)
+  let fetch_result = await fetch(GetDomain(API.Generate_SVG), {
+    method:'POST', 
+    headers: {"Content-Type": "application/json"}, 
+    body: JSON.stringify(json)
+  });
 
-  let fetch_result = await fetch(GetDomain(API.Generate_SVG), {method:'POST', headers: {"Content-Type": "application/json"}, body: JSON.stringify(json)});
   let fetch_json = await fetch_result.json();
-
 
   return redirect('/svg_workstation/' + session_id);
 }

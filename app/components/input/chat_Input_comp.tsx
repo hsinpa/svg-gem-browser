@@ -15,7 +15,6 @@ export const Chat_Input_Comp = function( {submit_callback}: {submit_callback: (m
     const push_message_callback = useMessageStore(s=>s.push_message);
     const [is_focus, set_focus] = useState(false);
     const [textarea_value, set_textarea] = useState('');
-    let set_input_block = useChatInputStore(state => state.set_input_block)
     let input_block_flag = useChatInputStore(state => state.input_block_flag)
 
     let set_textarea_height = function() {
